@@ -1,18 +1,20 @@
 {
   "name": "word-generator",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "mastra dev",
-    "build": "mastra build",
-    "start": "mastra start",
+    "dev": "tsx watch app.ts",
+    "start": "node dist/app.js",
+    "build": "tsc && mastra build",
+    "mastra:build": "mastra build",
     "deploy": "mastra deploy"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "Word generator API using Mastra",
   "type": "module",
   "engines": {
     "node": ">=20.9.0"
@@ -23,11 +25,18 @@
     "@mastra/libsql": "^0.16.1",
     "@mastra/loggers": "^0.10.18",
     "@mastra/memory": "^0.15.10",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10",
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
     "@types/node": "^24.9.2",
     "mastra": "^0.17.7",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   }
 }
