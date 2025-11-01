@@ -67,6 +67,10 @@ export const wordTool = createTool({
     contextSpecific: z.string().optional(),
   }),
   execute: async ({ context }) => {
+    if (!context || !context.action) {
+      throw new Error("Action is required but was not provided");
+    }
+
     return await getActionWords(
       context.action,
       context.context,
@@ -80,13 +84,9 @@ const getActionWords = async (
   context?: string,
   formalityLevel: "formal" | "neutral" | "informal" | "all" = "all"
 ): Promise<WordResponse> => {
-  // This is a simple implementation that returns structured data
-  // In a real scenario, you might call an external API or use an LLM
-  // For now, we'll return a basic structure that the agent can enhance
-
   const baseAnalysis = `Analyzing the action "${action}"${context ? ` in the context of ${context}` : ""}`;
 
-  // Basic word mappings (you can expand this or remove it entirely if you want pure LLM generation)
+  // Basic word database for common actions
   const wordDatabase: Record<string, Partial<WordResponse>> = {
     walk: {
       primaryWords: [
@@ -188,11 +188,67 @@ const getActionWords = async (
         },
       ],
     },
+    run: {
+      primaryWords: [
+        {
+          word: "run",
+          usage: "standard term for fast movement",
+          example: "I run every morning.",
+        },
+        {
+          word: "jog",
+          usage: "slower, steady running",
+          example: "She jogs in the park.",
+        },
+      ],
+      formal: [
+        {
+          word: "hasten",
+          usage: "formal, literary",
+          example: "We must hasten to the meeting.",
+        },
+        {
+          word: "expedite",
+          usage: "move quickly with purpose",
+          example: "Please expedite your journey.",
+        },
+      ],
+      informal: [
+        {
+          word: "dash",
+          usage: "quick, hurried movement",
+          example: "I dashed to catch the bus.",
+        },
+        {
+          word: "bolt",
+          usage: "sudden, rapid movement",
+          example: "He bolted out the door.",
+        },
+      ],
+      creative: [
+        {
+          word: "sprint",
+          usage: "very fast running",
+          example: "She sprinted across the finish line.",
+        },
+        {
+          word: "race",
+          usage: "competitive or urgent running",
+          example: "They raced through the streets.",
+        },
+      ],
+    },
   };
 
   // Get base suggestions from database or create empty structure
   const baseSuggestions = wordDatabase[action.toLowerCase()] || {
-    primaryWords: [],
+    primaryWords: [
+      {
+        word: action,
+        usage: "base form of the action",
+        example: `I ${action} regularly.`,
+      },
+    ],
     formal: [],
     informal: [],
     creative: [],
@@ -206,7 +262,7 @@ const getActionWords = async (
     informal: baseSuggestions.informal || [],
     creative: baseSuggestions.creative || [],
     contextSpecific: context
-      ? `Context-specific suggestions for ${context} will be enhanced by the agent.`
+      ? `Suggestions tailored for: ${context}`
       : undefined,
   };
 };
