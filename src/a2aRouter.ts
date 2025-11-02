@@ -1,6 +1,6 @@
 import { registerApiRoute } from "@mastra/core/server";
 import { randomUUID } from "crypto";
-import { wordAgent } from "../agents/word-agent.js";
+import { wordAgent } from "./mastra/agents/word-agent.js";
 
 interface ArtifactPart {
   kind: "text" | "data";

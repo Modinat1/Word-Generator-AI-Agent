@@ -3,13 +3,12 @@ import { wordWorkflow } from "./workflows/word-workflow";
 import { Mastra } from "@mastra/core/mastra";
 import { PinoLogger } from "@mastra/loggers";
 import { LibSQLStore } from "@mastra/libsql";
-import { a2aAgentRoute } from "./router/a2aRouter";
+import { a2aAgentRoute } from "../a2aRouter";
 
 import {
   toolCallAppropriatenessScorer,
   completenessScorer,
-  translationScorer,
-} from "./scorers/weather-scorer";
+} from "./scorers/word-scorer";
 
 export const mastra = new Mastra({
   workflows: { wordWorkflow },
@@ -17,7 +16,6 @@ export const mastra = new Mastra({
   scorers: {
     toolCallAppropriatenessScorer,
     completenessScorer,
-    translationScorer,
   },
   storage: new LibSQLStore({
     // stores observability, scores, ... into memory storage, if it needs to persist, change to file:../mastra.db
